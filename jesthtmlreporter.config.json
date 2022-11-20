@@ -1,0 +1,5 @@
+{
+    "pageTitle": "HTML Report",
+    "outputPath": "report.html",
+    "includeFailureMsg": true
+}
