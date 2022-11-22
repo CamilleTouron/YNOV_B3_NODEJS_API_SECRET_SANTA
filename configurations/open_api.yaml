@@ -26,9 +26,6 @@ tags:
     description: Everything about request.
   - name: admin
     description: Everything for admin.
-security:
-  - member: []
-  - admin: []
 paths:
   /help:
     get:
@@ -36,20 +33,18 @@ paths:
         - member
       summary: Get all routes except admin ones.
       description: Help to list all routes except admin ones.
-      security: []
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
-  /logging:
+  /login:
     post:
       tags:
         - member
         - admin
       summary: login
       description: login
-      security: []
       requestBody:
-          $ref: "#/components/requestBodies/Logging"
+          $ref: "#/components/requestBodies/Login"
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
@@ -196,7 +191,7 @@ components:
       schema:
         type: integer
   schemas:
-    Logging:
+    Login:
       type: object
       properties:
         pseudo:
@@ -206,7 +201,7 @@ components:
           type: string
           example: "etvhtrdvtyesvy"
       xml:
-        name: Logging
+        name: Login
     SignIn:
       type: object
       properties:
@@ -257,16 +252,16 @@ components:
       items:
         $ref: "#/components/schemas/Member"
   requestBodies:
-    Logging:
+    Login:
       required: true
-      description: Logging request body.
+      description: Login request body.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Logging'
+            $ref: '#/components/schemas/Login'
     SignIn:
       required: true
-      description: Logging request body.
+      description: Registration request body.
       content:
         application/json:
           schema:
