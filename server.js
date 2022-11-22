@@ -1,6 +1,11 @@
+const database = require('./models/index');
 const app = require('./app');
 require('dotenv').config();
 
-app.listen(process.env.port, () => {
-    console.log('Server running on port '+process.env.port+' !');
+database.instance.sync({force: true}).then(() => {
+    app.listen(process.env.port, () => {
+        console.log('Server connected to database and running on port '+process.env.port+' !');
+    });
+}).catch((e) => {
+    console.error(e);
 });
