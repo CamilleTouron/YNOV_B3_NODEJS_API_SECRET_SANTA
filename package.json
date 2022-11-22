@@ -4,7 +4,7 @@
   "description": "API for Secret Santa Events",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config server.js dotenv_config_path=./configurations/.env.DEV", 
+    "start": "nodemon -r dotenv/config server.js dotenv_config_path=./configurations/.env.DEV",
     "start:prod": "node -r dotenv/config server.js dotenv_config_path=./configurations/.env.PROD",
     "test": "jest"
   },
@@ -23,6 +23,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-list-endpoints": "^6.0.0",
     "express-openapi-validator": "^5.0.0",
     "jest-html-reporter": "^3.7.0",
     "jsonwebtoken": "^8.5.1",
