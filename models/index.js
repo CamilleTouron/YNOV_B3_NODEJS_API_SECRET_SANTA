@@ -7,5 +7,6 @@ const instance = new Sequelize({
 });
 
 module.exports = {
-    instance
+    instance,
+    member: require('./member')(instance)
 };

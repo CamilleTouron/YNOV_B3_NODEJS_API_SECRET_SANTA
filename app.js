@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const OpenApiValidator = require('express-openapi-validator');
 const loginRouter = require('./routers/login');
+const memberRouter = require('./routers/member');
 const all_routes = require('express-list-endpoints')
 
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(
 );
 //Routes :
 app.use('/login', loginRouter);
+app.use('/member', memberRouter);
 //List all routes.
 app.route('/help').get(function(req, res) {
     res.status(200).json({content: all_routes(app)});

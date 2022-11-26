@@ -3,7 +3,7 @@ info:
   title: SECRET SANTA
   description: API for web site handling SECRET SANTA events.
   contact:
-    email: touron.camille@icloud.com
+    email: touroncamille@icloud.com
   version: 1.0.0
 servers:
   - url: "{protocol}://{server}"
@@ -14,7 +14,7 @@ servers:
           - https
         default: http
       server:
-        default: localhost:3000
+        default: localhost:3003
 tags:
   - name: member
     description: Everything about members.
@@ -47,58 +47,36 @@ paths:
           $ref: "#/components/requestBodies/Login"
       responses:
         "500":
-          $ref: "#/components/responses/ServerError"
-  /signin:
-    post:
+          $ref: "#/components/responses/ServerError"    
+  /member:
+    get:
       tags:
         - member
-        - admin
-      summary: Create member.
-      description: Create member by signin with unique pseudo and complexe password.
-      security: []
-      requestBody:
-          $ref: "#/components/requestBodies/SignIn"
-      responses:
-        "500":
-          $ref: "#/components/responses/ServerError"
-  /admin/help:
-    get:
-      tags:
-        - admin
-      summary: Get all routes.
-      description: Help to list all routes.
-      security: 
-        - member : []
-        - admin : []
-      responses:
-        "500":
-          $ref: "#/components/responses/ServerError"
-  /admin/members:
-    get:
-      tags:
-        - admin
       summary: Get all members.
       description: ""
-      security: 
-        - member : []
-        - admin : []
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Members'
-  /admin/members/{id}:
+                $ref: '#/components/schemas/MembersForShowing'
+    post:
+      tags:
+        - member
+      summary: Create member.
+      description: Create member with complexe password.
+      requestBody:
+          $ref: "#/components/requestBodies/MemberCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /member/{id}:
     get:
       tags:
-        - admin
         - member
       summary: Get all members.
       description: Get member by id.
-      security: 
-        - member : []
-        - admin : []
       parameters:
         - name: id
           in: path
@@ -113,11 +91,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Member'
+                $ref: '#/components/schemas/MemberForShowing'
     delete:
       tags:
         - member
-        - admin
       summary: Supprimer un adhérent.
       description: Supprimer un adhérent supprime les avis qu'il a rédiger.
       operationId: delete member
@@ -131,45 +108,13 @@ paths:
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
-  /admin/members/{pseudo}:
-    get:
-      tags:
-        - admin
-        - member
-      summary: Get all members.
-      description: Get member by pseudo.
-      operationId: getMemberBypseudo
-      security: 
-        - member : []
-        - admin : []
-      parameters:
-        - name: pseudo
-          in: path
-          description: member pseudo
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Member'
-    delete:
+    patch:
       tags:
         - member
-        - admin
-      summary: Supprimer un adhérent.
-      description: Supprimer un adhérent supprime les avis qu'il a rédiger.
-      parameters:
-        - name: pseudo
-          in: path
-          description: pseudo of member
-          required: true
-          schema:
-            type: integer
+      summary: Update member.
+      description: Update member.
+      requestBody:
+          $ref: "#/components/requestBodies/MemberCreation"
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
@@ -194,7 +139,7 @@ components:
     Login:
       type: object
       properties:
-        pseudo:
+        mail:
             type: string
             example: "TheBoss"
         password:
@@ -202,12 +147,9 @@ components:
           example: "etvhtrdvtyesvy"
       xml:
         name: Login
-    SignIn:
+    Member:
       type: object
       properties:
-        pseudo:
-            type: string
-            example: "TheBoss"
         firstname:
           type: string
           example: "Touron"
@@ -222,15 +164,12 @@ components:
           example: "etvhtrdvtyesvy"
         mail:
             type: string
-            example: "camille.touron@icloud.com"
+            example: "touroncamille@icloud.com"
       xml:
-        name: Signin
-    Member:
+        name: Member
+    MemberForShowing:
       type: object
       properties:
-        pseudo:
-            type: string
-            example: "TheBoss"
         firstname:
           type: string
           example: "Touron"
@@ -241,16 +180,16 @@ components:
           type: boolean
           example: "false"
         mail:
-            type: string
-            example: "camille.touron@icloud.com"
+          type: string
+          example: "touroncamille@icloud.com"
       xml:
         name: Signin
-    Members:
+    MembersForShowing:
       type: array
       xml:
         wrapped: true
       items:
-        $ref: "#/components/schemas/Member"
+        $ref: "#/components/schemas/MemberForShowing"
   requestBodies:
     Login:
       required: true
@@ -259,13 +198,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Login'
-    SignIn:
+    MemberCreation:
       required: true
       description: Registration request body.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/SignIn'
+            $ref: '#/components/schemas/Member'
   responses:
     ServerError:
       description: "Server seems to be in bad shape..."

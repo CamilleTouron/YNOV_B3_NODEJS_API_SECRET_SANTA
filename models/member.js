@@ -17,9 +17,6 @@ module.exports = (instance) => {
         mail: {
             type: DataTypes.STRING
         },
-        pseudo: {
-            type: DataTypes.STRING
-        },
         isAdmin: {
             type: DataTypes.BOOLEAN
         },
@@ -27,6 +24,7 @@ module.exports = (instance) => {
             type: DataTypes.STRING
         }
     }, {
-        timestamps: false
+        timestamps: false,
+        freezeTableName: true
     });
 }

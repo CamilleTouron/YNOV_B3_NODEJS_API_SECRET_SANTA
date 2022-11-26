@@ -1,0 +1,6 @@
+- Rajouter la sécurité avec JWT.
+- CRUD Members.
+- CRUD Events.
+- CRUD Requetes.
+- Vérifier persistence des données.
+- Logger qui ecrit dans un fichier.
