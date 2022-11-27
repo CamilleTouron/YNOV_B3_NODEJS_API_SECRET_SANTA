@@ -3,3 +3,7 @@
 - CRUD Requetes.
 - Vérifier persistence des données.
 - Logger qui ecrit dans un fichier.
+- Affichage différent pour Admin ou membre
+- Cache
+- Test
+- Check yaml

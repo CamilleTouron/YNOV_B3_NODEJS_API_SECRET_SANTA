@@ -95,9 +95,8 @@ paths:
     delete:
       tags:
         - member
-      summary: Supprimer un adhérent.
-      description: Supprimer un adhérent supprime les avis qu'il a rédiger.
-      operationId: delete member
+      summary: Delete member.
+      description: Delete member by id.
       parameters:
         - name: id
           in: path
@@ -113,8 +112,91 @@ paths:
         - member
       summary: Update member.
       description: Update member.
+      parameters:
+        - name: id
+          in: path
+          description: Id de l'adhérent.
+          required: true
+          schema:
+            type: integer
       requestBody:
           $ref: "#/components/requestBodies/MemberCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /event:
+    get:
+      tags:
+        - event
+      summary: Get all events.
+      description: ""
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsForShowing'
+    post:
+      tags:
+        - event
+      summary: Create event.
+      description: Create event with unique name.
+      requestBody:
+          $ref: "#/components/requestBodies/EventCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /event/{id}:
+    get:
+      tags:
+        - event
+      summary: Get event.
+      description: Get event by id.
+      parameters:
+        - name: id
+          in: path
+          description: event id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventForShowing'
+    delete:
+      tags:
+        - event
+      summary: Delete event.
+      description: Delete event by id.
+      parameters:
+        - name: id
+          in: path
+          description: Event id.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - event
+      summary: Update event.
+      description: Update event.
+      parameters:
+        - name: id
+          in: path
+          description: Id de l'adhérent.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+          $ref: "#/components/requestBodies/EventCreation"
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
@@ -183,13 +265,33 @@ components:
           type: string
           example: "touroncamille@icloud.com"
       xml:
-        name: Signin
+        name: MemberForShowing
     MembersForShowing:
       type: array
       xml:
         wrapped: true
       items:
         $ref: "#/components/schemas/MemberForShowing"
+    EventForShowing:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Super fete ynov."
+        date:
+          type: string
+          example: "22-03-1999"
+        location:
+          type: string
+          example: "Toulouse"
+      xml:
+        name: EventForShowing
+    EventsForShowing:
+      type: array
+      xml:
+        wrapped: true
+      items:
+        $ref: "#/components/schemas/EventForShowing"
   requestBodies:
     Login:
       required: true
@@ -205,6 +307,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Member'
+    EventCreation:
+      required: true
+      description: Registration request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EventForShowing'
   responses:
     ServerError:
       description: "Server seems to be in bad shape..."

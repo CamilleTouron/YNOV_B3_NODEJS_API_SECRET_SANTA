@@ -8,14 +8,14 @@ exports.getMembers = async (req, res) => {
     for (var member of members) {
         data.push(manageContent(member));
     }
-    res.json({ data: data });
+    res.status(200).json({ data: data });
 };
 
 exports.getMemberById = async (req, res) => {
     try {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
-            res.json({ data: manageContent(member[0]) });
+            res.status(200).json({ data: manageContent(member[0]) });
             return true;
         } else {
             res.status(404).json({ message: "Member does not exist." });
@@ -23,7 +23,7 @@ exports.getMemberById = async (req, res) => {
         }
     } catch (e) {
         if (res != null) {
-            res.status(400).json({ message: "Wrong parameters." });
+            res.status(400).json({ message: "Error getting member.", error: e.message });
         }
         return false;
     }
@@ -102,7 +102,7 @@ exports.createAdmin = async () => {
             }
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 };
 
@@ -134,8 +134,7 @@ exports.updateMember = async (req, res) => {
             res.status(404).json({ message: "Member not found." });
         }
     } catch (error) {
-        throw new Error("Failed to update member.");
-
+        res.status(400).json({ message: "Error creating member.", error : error.message });
     }
 };
 

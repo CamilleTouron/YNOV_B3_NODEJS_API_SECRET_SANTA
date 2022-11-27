@@ -11,7 +11,7 @@ exports.crypt = function (password){
 exports.compare = function (password,hash){
     try{
         const compare = bcrypt.compareSync(password, hash);
-        return true;
+        return compare;
     }catch(err){
         throw new Error('Pbm comparing encoded password');
     }
