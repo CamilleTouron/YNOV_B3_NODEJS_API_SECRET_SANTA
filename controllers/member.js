@@ -30,21 +30,31 @@ exports.getMemberById = async (req, res) => {
 };
 
 exports.createMember = async (req, res) => {
-    if (req.body && req.body.firstname && /^[a-zA-Z]+$/.test(req.body.firstname) && req.body.firstname != process.env.ADMIN_FIRSTNAME
-        && req.body.lastname && /^[a-zA-Z]+$/.test(req.body.lastName) && req.body.firstname != process.env.ADMIN_LASTNAME
-        && req.body.mail && req.body.mail.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-        && req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)
-        && req.body.password && !/\s/.test(req.body.password)) {
-        if (true) { }
-        try {
-            memberService.addMember(req.body.lastname, req.body.firstname, req.body.mail, req.body.isAdmin, passwordService.crypt(req.body.password));
+    try {
+        if (req.body && req.body.firstname && /^[a-zA-Z]+$/.test(req.body.firstname) && req.body.firstname != process.env.ADMIN_FIRSTNAME
+            && req.body.lastname && /^[a-zA-Z]+$/.test(req.body.lastName) && req.body.firstname != process.env.ADMIN_LASTNAME
+            && req.body.mail && req.body.mail.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+            && req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)
+            && req.body.password && !/\s/.test(req.body.password)) {
+            let member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
+            if (member[0] && member[0].mail) {
+                res.status(400).json({ message: "Member with this mail already exist." });
+                return;
+            }
+            await memberService.addMember(req.body.lastname, req.body.firstname, req.body.mail.toLowerCase(), req.body.isAdmin, passwordService.crypt(req.body.password));
+            member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
+            if (!member[0].mail) {
+                res.status(400).json({ message: "Member not created." });
+                return;
+            }
             res.status(201).json({ message: "Member well created." });
-        } catch (e) {
-            res.status(400).json({ message: "Member not created.", error: e.message });
+        } else {
+            res.status(400).json({ message: "Wrong parameters." });
         }
-    } else {
-        res.status(400).json({ message: "Wrong parameters." });
+    } catch (error) {
+        res.status(400).json({ message: "Member not created.", error: error.message });
     }
+
 };
 
 exports.deleteMemberById = async (req, res) => {

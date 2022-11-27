@@ -23,6 +23,14 @@ exports.getMemberById = (id) => {
     });
 };
 
+exports.getMemberByMail = (mail) => {
+    return dataBase.member.findAll({
+        where: {
+            mail
+        }
+    });
+};
+
 exports.addMember = (lastname, firstname, mail, isAdmin, password) => {
     return dataBase.member.create({ lastname, firstname, mail, isAdmin, password });
 };
