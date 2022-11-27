@@ -8,7 +8,13 @@ exports.getMembers = async (req, res) => {
     for (var member of members) {
         data.push(manageContent(member));
     }
-    res.status(200).json({ data: data });
+    if(data[0]){
+        res.status(200).json({ data: data });
+        return;
+    }else{
+        res.status(404).json({ message: "There is no participation." });
+        return;
+    }
 };
 
 exports.getMemberById = async (req, res) => {

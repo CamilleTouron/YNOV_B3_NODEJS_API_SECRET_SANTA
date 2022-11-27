@@ -7,7 +7,13 @@ exports.getEvents = async (req, res) => {
     for (var event of events) {
         data.push(manageContent(event));
     }
-    res.status(200).json({ data: data });
+    if(data[0]){
+        res.status(200).json({ data: data });
+        return;
+    }else{
+        res.status(404).json({ message: "There is no participation." });
+        return;
+    }
 };
 
 exports.getEventById = async (req, res) => {
@@ -22,7 +28,7 @@ exports.getEventById = async (req, res) => {
         }
     } catch (e) {
         if (res != null) {
-            res.status(400).json({ message: "Wrong parameters." , error: e.message});
+            res.status(400).json({ message: "Wrong parameters.", error: e.message });
         }
         return false;
     }
@@ -74,7 +80,7 @@ exports.updateEvent = async (req, res) => {
         let event = await eventService.getEventById(parseInt(req.params.id));
         if (event) {
             if (req.body) {
-                let changes=[];
+                let changes = [];
                 if (req.body.name) {
                     eventService.updateName(req.params.id, req.body.name.toLowerCase());
                     changes.push("name");
@@ -87,7 +93,7 @@ exports.updateEvent = async (req, res) => {
                     eventService.updateDate(req.params.id, req.body.end);
                     changes.push("end");
                 }
-                res.status(200).json({ message: "Update well done." , changes : changes});
+                res.status(200).json({ message: "Update well done.", changes: changes });
             } else {
                 res.status(400).json({ message: "Wrong parameters." });
             }
@@ -104,12 +110,12 @@ function manageContent(event) {
         "id": event.id,
         "name": event.name,
         "location": event.location,
-        "end":event.end
+        "end": event.end
     }
 };
 
 function isDateValid(date) {
     var regex = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
     const isValid = moment(date).isValid();
-    return (isValid &&  regex.test(date));
-}
+    return (isValid && regex.test(date));
+};

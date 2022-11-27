@@ -200,6 +200,82 @@ paths:
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
+  /participation:
+    get:
+      tags:
+        - participation
+      summary: Get all participations.
+      description: ""
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParticipationsForShowing'
+    post:
+      tags:
+        - participation
+      summary: Create participation.
+      description: Create participation.
+      requestBody:
+          $ref: "#/components/requestBodies/ParticipationCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /participation/{id}:
+    get:
+      tags:
+        - participation
+      summary: Get participation.
+      description: Get participation by id.
+      parameters:
+        - name: id
+          in: path
+          description: participation id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParticipationForShowing'
+    delete:
+      tags:
+        - participation
+      summary: Delete participation.
+      description: Delete participation by id.
+      parameters:
+        - name: id
+          in: path
+          description: participation id.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - participation
+      summary: Update participation.
+      description: Update participation.
+      parameters:
+        - name: id
+          in: path
+          description: Id de l'adhérent.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+          $ref: "#/components/requestBodies/ParticipationCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
 components:
   securitySchemes:
     member:
@@ -292,6 +368,29 @@ components:
         wrapped: true
       items:
         $ref: "#/components/schemas/EventForShowing"
+    ParticipationForShowing:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 1
+        memberAttributedId:
+          type: integer
+          example: 2
+        eventId:
+          type: integer
+          example: 3
+        isOrganizer:
+          type: boolean
+          example: true
+      xml:
+        name: ParticipationForShowing
+    ParticipationsForShowing:
+      type: array
+      xml:
+        wrapped: true
+      items:
+        $ref: "#/components/schemas/ParticipationForShowing"
   requestBodies:
     Login:
       required: true
@@ -302,7 +401,7 @@ components:
             $ref: '#/components/schemas/Login'
     MemberCreation:
       required: true
-      description: Registration request body.
+      description: Member creation request body.
       content:
         application/json:
           schema:
@@ -310,6 +409,13 @@ components:
     EventCreation:
       required: true
       description: Registration request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EventForShowing'
+    ParticipationCreation:
+      required: true
+      description: Participation creation request body.
       content:
         application/json:
           schema:
