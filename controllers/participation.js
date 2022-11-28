@@ -1,21 +1,30 @@
 const participationService = require('../services/participation');
 const eventService = require('../services/event');
 const memberService = require('../services/member');
+var cacheService = require('memory-cache');
 
-exports.getParticipations = async (req, res) => {
-    const participations = await participationService.getParticipations();
-    let data = [];
-    for (var participation of participations) {
-        data.push(manageContent(participation));
-    }
-    if (data[0]) {
-        res.status(200).json({ data: data });
+exports.getParticipations = async (req, res) => {//server cache
+    var cache = cacheService.get("participations");
+    if(cache!=null){
+        console.log('using server cache')
+        res.status(200).json({ data: cache });
         return;
-    } else {
-        res.status(404).json({ message: "There is no participation." });
-        return;
-    }
-
+    }else{
+        const participations = await participationService.getParticipations();
+        let data = [];
+        for (var participation of participations) {
+            data.push(manageContent(participation));
+        }
+        if (data[0]) {
+            console.log('not using server cache')
+            cacheService.put("participations",data,10000);
+            res.status(200).json({ data: data });
+            return;
+        } else {
+            res.status(404).json({ message: "There is no participation." });
+            return;
+        }
+    }  
 };
 
 exports.getParticipationById = async (req, res) => {

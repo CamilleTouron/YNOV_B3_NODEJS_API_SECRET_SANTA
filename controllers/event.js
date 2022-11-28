@@ -1,4 +1,5 @@
 const eventService = require('../services/event');
+const cityService = require('../services/city');
 const moment = require('moment');
 
 exports.getEvents = async (req, res) => {
@@ -36,9 +37,10 @@ exports.getEventById = async (req, res) => {
 
 exports.createEvent = async (req, res) => {
     try {
+        let isOK= await cityService.isCityOk(req.body.location);
         if (req.body
             && req.body.name
-            && req.body.location && /^[a-zA-Z]+$/.test(req.body.location)
+            && req.body.location && /^[a-zA-Z]+$/.test(req.body.location) && isOK
             && req.body.end && isDateValid(req.body.end)) {
             let event = await eventService.getEventByName(req.body.name.toLowerCase());
             if (event[0] && event[0].name) {

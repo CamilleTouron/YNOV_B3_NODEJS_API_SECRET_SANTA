@@ -47,6 +47,15 @@ paths:
           $ref: "#/components/requestBodies/Login"
       responses:
         "500":
+          $ref: "#/components/responses/ServerError"  
+  /cache:
+    delete:
+      tags:
+        - cache
+      summary: delete server cache
+      description: delete server cache
+      responses:
+        "500":
           $ref: "#/components/responses/ServerError"    
   /member:
     get:
