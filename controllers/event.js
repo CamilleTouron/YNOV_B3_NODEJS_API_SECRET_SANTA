@@ -79,6 +79,7 @@ exports.deleteEventById = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
     try {
+        let isOK= await cityService.isCityOk(req.body.location);
         let event = await eventService.getEventById(parseInt(req.params.id));
         if (event) {
             if (req.body) {
@@ -87,7 +88,7 @@ exports.updateEvent = async (req, res) => {
                     eventService.updateName(req.params.id, req.body.name.toLowerCase());
                     changes.push("name");
                 }
-                if (req.body.location && /^[a-zA-Z]+$/.test(req.body.location)) {
+                if (req.body.location && /^[a-zA-Z]+$/.test(req.body.location) && isOK) {
                     eventService.updateLocation(req.params.id, req.body.location.toLowerCase());
                     changes.push("location");
                 }
