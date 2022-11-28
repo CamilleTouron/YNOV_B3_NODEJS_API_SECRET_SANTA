@@ -1,5 +1,6 @@
 const memberService = require('../services/member');
-const passwordService = require('../services/password')
+const passwordService = require('../services/password');
+const participation = require('../services/participation');
 require('dotenv').config();
 
 exports.getMembers = async (req, res) => {
@@ -21,7 +22,9 @@ exports.getMemberById = async (req, res) => {
     try {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
-            res.status(200).json({ data: manageContent(member[0]) });
+            const participations = await participation.getParticipationByMemberId(parseInt(req.params.id));
+            console.log(participations)
+            res.status(200).json({ data: manageContent(member[0]) , participations: (participations[0]!=undefined?participations:"none") });
             return true;
         } else {
             res.status(404).json({ message: "Member does not exist." });
@@ -65,9 +68,10 @@ exports.createMember = async (req, res) => {
 
 exports.deleteMemberById = async (req, res) => {
     if (req.params.id) {
-        const member = memberService.getMemberById(req.params.id);
+        const member = await memberService.getMemberById(req.params.id);
         if (member) {
             memberService.deleteMemberById(req.params.id);
+            await participation.deleteParticipationByMemberId(req.params.id)
             res.json({ message: "Member well deleted." });
         } else {
             res.status(404).json({ message: "Member not found." });
@@ -79,11 +83,8 @@ exports.deleteMemberById = async (req, res) => {
 
 exports.doAdminExist = async () => {
     try {
-        console.log("xtf")
         const admin = memberService.getAdmin();
         if (admin.dataValues.mail != null) {
-            console.log("xtf")
-            console.log(admin.dataValues.mail)
             return true;
         } else {
             return false;

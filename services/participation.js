@@ -73,6 +73,14 @@ exports.deleteParticipationByMemberId = (memberId) => {
     });
 };
 
+exports.deleteParticipationByMemberId = (memberId) => {
+    return dataBase.participation.destroy({
+        where: {
+            memberId
+        }
+    });
+};
+
 exports.updateOrganizer = (id, isOrganizer) => {
     return dataBase.participation.update(
         { isOrganizer },
