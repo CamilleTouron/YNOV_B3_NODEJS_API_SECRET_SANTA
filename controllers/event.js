@@ -12,7 +12,7 @@ exports.getEvents = async (req, res) => {
         res.status(200).json({ data: data });
         return;
     }else{
-        res.status(404).json({ message: "There is no participation." });
+        res.status(404).json({ message: "There is no event." });
         return;
     }
 };
@@ -27,9 +27,9 @@ exports.getEventById = async (req, res) => {
             res.status(404).json({ message: "Event does not exist." });
             return false;
         }
-    } catch (e) {
+    } catch (error) {
         if (res != null) {
-            res.status(400).json({ message: "Wrong parameters.", error: e.message });
+            res.status(400).json({ message: "Wrong parameters.", error: error.message });
         }
         return false;
     }
@@ -68,7 +68,7 @@ exports.deleteEventById = async (req, res) => {
         const event = eventService.getEventById(req.params.id);
         if (event) {
             eventService.deleteEventById(req.params.id);
-            res.json({ message: "Event well deleted." });
+            res.status(200).json({ message: "Event well deleted." });
         } else {
             res.status(404).json({ message: "Event not found." });
         }

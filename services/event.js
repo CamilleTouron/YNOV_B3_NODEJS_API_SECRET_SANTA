@@ -4,7 +4,7 @@ exports.getEvents = () => {
 };
 
 exports.getEventById = (id) => {
-    return dataBase.event.findAll({
+    return dataBase.event.findOne({
         where: {
             id
         }

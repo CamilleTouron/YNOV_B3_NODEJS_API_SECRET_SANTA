@@ -16,11 +16,9 @@ exports.isCityOk = async (city) => {
             } else {
                 return false;
             }
-        }).catch((e) => {
-            if (e.response && e.response.status && e.response.data) {
-                console.log(e);
-                return false;
-            }
+        }).catch((error) => {
+            console.log(error);
+            return false;
         });
     return ret;
 }

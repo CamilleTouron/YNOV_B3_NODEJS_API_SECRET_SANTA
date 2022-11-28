@@ -30,9 +30,11 @@ paths:
   /help:
     get:
       tags:
-        - member
-      summary: Get all routes except admin ones.
-      description: Help to list all routes except admin ones.
+        - admin
+      summary: Get all routes.
+      description: Help to list all routes, reserved for admin.
+      security:
+        - auth: []
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
@@ -54,6 +56,8 @@ paths:
         - cache
       summary: delete server cache
       description: delete server cache
+      security:
+        - auth: []
       responses:
         "500":
           $ref: "#/components/responses/ServerError"    
@@ -63,6 +67,8 @@ paths:
         - member
       summary: Get all members.
       description: ""
+      security:
+        - auth: []
       responses:
         '200':
           description: Successful operation
@@ -86,6 +92,8 @@ paths:
         - member
       summary: Get all members.
       description: Get member by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -106,6 +114,8 @@ paths:
         - member
       summary: Delete member.
       description: Delete member by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -121,6 +131,8 @@ paths:
         - member
       summary: Update member.
       description: Update member.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -139,6 +151,8 @@ paths:
         - event
       summary: Get all events.
       description: ""
+      security:
+        - auth: []
       responses:
         '200':
           description: Successful operation
@@ -151,6 +165,8 @@ paths:
         - event
       summary: Create event.
       description: Create event with unique name.
+      security:
+        - auth: []
       requestBody:
           $ref: "#/components/requestBodies/EventCreation"
       responses:
@@ -162,6 +178,8 @@ paths:
         - event
       summary: Get event.
       description: Get event by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -182,6 +200,8 @@ paths:
         - event
       summary: Delete event.
       description: Delete event by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -197,6 +217,8 @@ paths:
         - event
       summary: Update event.
       description: Update event.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -215,6 +237,8 @@ paths:
         - participation
       summary: Get all participations.
       description: ""
+      security:
+        - auth: []
       responses:
         '200':
           description: Successful operation
@@ -227,6 +251,8 @@ paths:
         - participation
       summary: Create participation.
       description: Create participation.
+      security:
+        - auth: []
       requestBody:
           $ref: "#/components/requestBodies/ParticipationCreation"
       responses:
@@ -238,6 +264,8 @@ paths:
         - participation
       summary: Get participation.
       description: Get participation by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -258,6 +286,8 @@ paths:
         - participation
       summary: Delete participation.
       description: Delete participation by id.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -273,6 +303,8 @@ paths:
         - participation
       summary: Update participation.
       description: Update participation.
+      security:
+        - auth: []
       parameters:
         - name: id
           in: path
@@ -287,14 +319,10 @@ paths:
           $ref: "#/components/responses/ServerError"
 components:
   securitySchemes:
-    member:
+    auth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    admin:
-      type: apiKey
-      in: header
-      name: X-ADMIN-KEY
   parameters:
     idInPath:
       required: true

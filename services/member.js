@@ -16,7 +16,7 @@ exports.getAdmin = () => {
 };
 
 exports.getMemberById = (id) => {
-    return dataBase.member.findAll({
+    return dataBase.member.findOne({
         where: {
             id
         }
@@ -24,7 +24,7 @@ exports.getMemberById = (id) => {
 };
 
 exports.getMemberByMail = (mail) => {
-    return dataBase.member.findAll({
+    return dataBase.member.findOne({
         where: {
             mail
         }

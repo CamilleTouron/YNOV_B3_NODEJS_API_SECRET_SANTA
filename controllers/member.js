@@ -23,16 +23,15 @@ exports.getMemberById = async (req, res) => {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
             const participations = await participation.getParticipationByMemberId(parseInt(req.params.id));
-            console.log(participations)
             res.status(200).json({ data: manageContent(member[0]) , participations: (participations[0]!=undefined?participations:"none") });
             return true;
         } else {
             res.status(404).json({ message: "Member does not exist." });
             return false;
         }
-    } catch (e) {
+    } catch (error) {
         if (res != null) {
-            res.status(400).json({ message: "Error getting member.", error: e.message });
+            res.status(400).json({ message: "Error getting member.", error: error.message });
         }
         return false;
     }
@@ -46,13 +45,13 @@ exports.createMember = async (req, res) => {
             && req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)
             && req.body.password && !/\s/.test(req.body.password)) {
             let member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
-            if (member[0] && member[0].mail) {
+            if (member && member.mail) {
                 res.status(400).json({ message: "Member with this mail already exist." });
                 return;
             }
             await memberService.addMember(req.body.lastname, req.body.firstname, req.body.mail.toLowerCase(), req.body.isAdmin, passwordService.crypt(req.body.password));
             member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
-            if (!member[0].mail) {
+            if (!member.mail) {
                 res.status(400).json({ message: "Member not created." });
                 return;
             }
@@ -69,12 +68,12 @@ exports.createMember = async (req, res) => {
 exports.deleteMemberById = async (req, res) => {
     if (req.params.id) {
         const member = await memberService.getMemberById(req.params.id);
-        if (member) {
-            memberService.deleteMemberById(req.params.id);
+        if (member && member.isAdmin==false) {
+            await memberService.deleteMemberById(req.params.id);
             await participation.deleteParticipationByMemberId(req.params.id)
             res.json({ message: "Member well deleted." });
         } else {
-            res.status(404).json({ message: "Member not found." });
+            res.status(404).json({ message: "Member not found or cannot delete admin." });
         }
     } else {
         res.status(400).json({ message: "Wrong parameters." });
@@ -89,7 +88,7 @@ exports.doAdminExist = async () => {
         } else {
             return false;
         }
-    } catch (e) {
+    } catch (error) {
         return false;
     }
 };
@@ -101,7 +100,7 @@ exports.createAdmin = async () => {
             console.log("Admin already exist.");
             return;
         } else {
-            memberService.addMember(process.env.ADMIN_LASTNAME, process.env.ADMIN_FIRSTNAME, "touroncamille@icloud.com", true, passwordService.crypt(process.env.ADMIN_PWD));
+            memberService.addMember(process.env.ADMIN_LASTNAME, process.env.ADMIN_FIRSTNAME, process.env.ADMIN_MAIL, true, passwordService.crypt(process.env.ADMIN_PWD));
             admin = memberService.getAdmin();
             if (admin.dataValues != null && admin.dataValues.mail != null) {
                 console.log("Cannot create admin.");

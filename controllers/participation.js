@@ -6,7 +6,6 @@ var cacheService = require('memory-cache');
 exports.getParticipations = async (req, res) => {//server cache
     var cache = cacheService.get("participations");
     if(cache!=null){
-        console.log('using server cache')
         res.status(200).json({ data: cache });
         return;
     }else{
@@ -16,7 +15,6 @@ exports.getParticipations = async (req, res) => {//server cache
             data.push(manageContent(participation));
         }
         if (data[0]) {
-            console.log('not using server cache')
             cacheService.put("participations",data,10000);
             res.status(200).json({ data: data });
             return;
@@ -37,9 +35,9 @@ exports.getParticipationById = async (req, res) => {
             res.status(404).json({ message: "Participation does not exist." });
             return false;
         }
-    } catch (e) {
+    } catch (error) {
         if (res != null) {
-            res.status(400).json({ message: "Wrong parameters.", error: e.message });
+            res.status(400).json({ message: "Wrong parameters.", error: error.message });
         }
         return false;
     }
@@ -52,26 +50,24 @@ exports.createParticipation = async (req, res) => {
             const event = await eventService.getEventById(parseInt(req.body.eventId));
             const participation = await participationService.getParticipationByAssociation(parseInt(req.body.memberId), parseInt(req.body.eventId));
 
-            if (member[0] == undefined) {
+            if (member == undefined) {
                 res.status(404).json({ message: "Member does not exists." });
                 return;
             }
 
-            if (event[0] == undefined) {
+            if (event == undefined) {
                 res.status(404).json({ message: "Event does not exists." });
                 return;
             }
-            if (!participation[0] == undefined) {
+            if (participation!=null) {
                 res.status(400).json({ message: "Participation with this member already exist." });
                 return;
             }
-            console.log(participation)
             await participationService.addParticipation(req.body.memberId, req.body.eventId, req.body.isOrganizer);
 
             res.status(201).json({ message: "Participation well created." });
 
         } else {
-            console.log(req.body.memberId, req.body.memberAttributedId, req.body.eventId, req.body.isOrganizer != null)
             res.status(400).json({ message: "Wrong parameters." });
         }
     } catch (error) {

@@ -1,8 +1,7 @@
-- Rajouter la sécurité avec JWT.
 - Logger qui ecrit dans un fichier. 
-- Affichage différent pour Admin ou membre
-- Cache
-- Test
+- Test junit.
 - Check yaml
 - Finir readme
 - Déployer.
+- Tirage.
+- jeu de donnees

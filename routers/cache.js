@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const cacheService = require('../services/cache')
+const authService = require('../controllers/login');
+const cacheService = require('../services/cache');
 
-router.delete('/', cacheService.deleteCache);
+router.delete('/',authService.authAdmin ,cacheService.deleteCache);
 
 module.exports = router;

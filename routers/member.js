@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const authService = require('../controllers/login');
 const memberController = require('../controllers/member')
 
-router.get('/', memberController.getMembers);
-router.get('/:id', memberController.getMemberById);
+router.get('/', authService.authAdmin, memberController.getMembers);
+router.get('/:id', authService.auth, memberController.getMemberById);
 router.post('/', memberController.createMember);
-router.delete('/:id', memberController.deleteMemberById);
-router.patch('/:id', memberController.updateMember);
+router.delete('/:id', authService.authAdmin, memberController.deleteMemberById);
+router.patch('/:id', authService.authAdmin, memberController.updateMember);
 
 
 module.exports = router;

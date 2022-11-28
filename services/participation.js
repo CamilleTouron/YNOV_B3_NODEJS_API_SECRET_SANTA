@@ -13,7 +13,7 @@ exports.getParticipationById = (id) => {
 };
 
 exports.getParticipationByAssociation = (memberId,eventId) => {
-    return dataBase.participation.findAll({
+    return dataBase.participation.findOne({
         where: {
             memberId,
             eventId
