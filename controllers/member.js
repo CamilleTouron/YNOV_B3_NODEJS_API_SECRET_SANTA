@@ -97,18 +97,17 @@ exports.createAdmin = async () => {
     let admin = memberService.getAdmin();
     try {
         if (admin.dataValues != null && admin.dataValues.mail != null) {
-            console.log("Admin already exist.");
             return;
         } else {
             memberService.addMember(process.env.ADMIN_LASTNAME, process.env.ADMIN_FIRSTNAME, process.env.ADMIN_MAIL, true, passwordService.crypt(process.env.ADMIN_PWD));
             admin = memberService.getAdmin();
             if (admin.dataValues != null && admin.dataValues.mail != null) {
-                console.log("Cannot create admin.");
                 throw new Error("Failed to create Admin so server cannot start.");
             }
         }
     } catch (error) {
-        console.log(error);
+        throw new Error("Failed to create Admin so server cannot start."+error);
+
     }
 };
 

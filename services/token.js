@@ -11,7 +11,7 @@ function getPayload(isAdmin,memberId) {
 
 exports.getToken = (isAdmin,memberId) => {
     try {
-        const retult = jwt.sign({ data: getPayload(isAdmin,memberId) }, process.env.SECRET, { expiresIn: '1h' });
+        const retult = jwt.sign({ data: getPayload(isAdmin,memberId) }, process.env.SECRET, { expiresIn: process.env.TOKEN_TIMEOUT });
         return retult;
     } catch (error) {
         throw new Error('Pbm generating token' + error);
@@ -23,7 +23,6 @@ exports.checkToken =  (token) => {
         const result = jwt.verify(token, process.env.SECRET);
         return result;
     } catch (error) {
-        console.log('Token is bad!'+error);
         return false;
     }
 }
@@ -40,7 +39,6 @@ exports.isAdminToken = (token) => {
             return false;
         }
     } catch (error) {
-        console.log('Token is bad!'+error);
         return false;
     }
 }
@@ -58,7 +56,6 @@ exports.getMemberIdFromToken = (token) => {
             return null;
         }
     } catch (error) {
-        console.log('Token is bad!'+error);
         return null;
     }
 }

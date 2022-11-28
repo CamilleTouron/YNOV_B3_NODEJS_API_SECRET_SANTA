@@ -17,7 +17,6 @@ exports.isCityOk = async (city) => {
                 return false;
             }
         }).catch((error) => {
-            console.log(error);
             return false;
         });
     return ret;

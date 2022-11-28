@@ -44,10 +44,8 @@ exports.authOrganizerOrAdmin = async (req, res, next) => {
                 const member = await memberService.getMemberById(memberId);
                 let participation = await participationService.getParticipationByAssociation(memberId, parseInt(req.params.id));
                 if ((member && member.isAdmin) || (participation && participation.isOrganizer)) {
-                    console.log("bonsoir");
                     next();
                 } else {
-                    console.log("bonjour");
                     res.status(400).json({ message: 'You are not organizer or admin so you have not the rights.' });
                 }
             } else {

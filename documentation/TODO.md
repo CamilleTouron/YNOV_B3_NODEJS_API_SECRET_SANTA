@@ -1,7 +1,8 @@
 - Logger qui ecrit dans un fichier. 
-- Test junit.
-- Check yaml
-- Finir readme
+- Test jest.
+- Check yaml.
+- Finir readme.
 - Déployer.
 - Tirage.
-- jeu de donnees
+- Jeu de donnees.
+- Formater tout les fichiers.
