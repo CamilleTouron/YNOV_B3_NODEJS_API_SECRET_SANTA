@@ -317,6 +317,24 @@ paths:
       responses:
         "500":
           $ref: "#/components/responses/ServerError"
+  /event/draw/{id}:
+    patch:
+      tags:
+        - event
+      summary: Draw participation.
+      description: Draw participation.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id member.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
 components:
   securitySchemes:
     auth:

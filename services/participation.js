@@ -91,12 +91,13 @@ exports.updateOrganizer = (id, isOrganizer) => {
         })
 };
 
-exports.updateMemberAttributedId = (id, memberAttributedId) => {
+exports.updateMemberAttributedId = (id , memberId, memberAttributedId) => {
     return dataBase.participation.update(
         { memberAttributedId },
         {
             where: {
-                id
+                id,
+                memberId
             }
         })
 };

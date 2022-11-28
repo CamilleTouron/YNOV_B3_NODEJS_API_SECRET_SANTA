@@ -38,21 +38,22 @@ exports.authAdmin = async (req, res, next) => {
 exports.authOrganizerOrAdmin = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        if (token) {
+        const eventId = parseInt(req.params.id) ? parseInt(req.params.id) : parseInt(req.body.eventId);
+        if (token && eventId) {
             const memberId = tokenService.getMemberIdFromToken(token);
             if (memberId != null) {
                 const member = await memberService.getMemberById(memberId);
-                let participation = await participationService.getParticipationByAssociation(memberId, parseInt(req.params.id));
+                let participation = await participationService.getParticipationByAssociation(memberId, eventId);
                 if ((member && member.isAdmin) || (participation && participation.isOrganizer)) {
                     next();
                 } else {
                     res.status(400).json({ message: 'You are not organizer or admin so you have not the rights.' });
                 }
             } else {
-                res.status(400).json({ message: 'Error getting member id.' });
+                res.status(400).json({ message: 'Token is not valid.' });
             }
         } else {
-            res.status(401).json({ message: 'Token is not valid.' });
+            res.status(401).json({ message: 'Wrong parameters.' });
         }
     } catch (error) {
         next(error);

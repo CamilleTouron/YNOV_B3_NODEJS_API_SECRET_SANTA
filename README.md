@@ -26,12 +26,10 @@ Every Organizer and Participants are members but they get different right accord
   - GET to login.
   - POST to subscribe.
   
-## Technologies and versions :
-NodeJS :
-
-NPM :
 
 ## Installation :
-
+git init
+git clone https://github.com/CamilleTouron/NODEJS_API_SECRET_SANTA.git
+npm start
 
   

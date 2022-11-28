@@ -48,6 +48,7 @@ exports.createParticipation = async (req, res) => {
         if (req.body && req.body.memberId && req.body.eventId && req.body.isOrganizer != null) {
             const member = await memberService.getMemberById(parseInt(req.body.memberId));
             const event = await eventService.getEventById(parseInt(req.body.eventId));
+            console.log(parseInt(req.body.eventId))
             const participation = await participationService.getParticipationByAssociation(parseInt(req.body.memberId), parseInt(req.body.eventId));
 
             if (member == undefined) {

@@ -8,6 +8,7 @@ router.get('/:id', authService.auth, eventController.getEventById);
 router.post('/', authService.auth, eventController.createEvent);
 router.delete('/:id', authService.authOrganizerOrAdmin, eventController.deleteEventById);
 router.patch('/:id', authService.authOrganizerOrAdmin, eventController.updateEvent);
+router.patch('/draw/:id', authService.authOrganizerOrAdmin, eventController.drawAssociationForEvent);
 
 
 module.exports = router;

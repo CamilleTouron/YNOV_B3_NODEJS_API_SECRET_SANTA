@@ -3,7 +3,7 @@ const app = require('./app');
 const memberController = require('./controllers/member');
 require('dotenv').config();
 
-database.instance.sync({ force: process.env.port }).then(() => {
+database.instance.sync({ force: process.env.FORCE }).then(() => {
     memberController.createAdmin();
     app.listen(process.env.port, () => {
         console.log('Server connected to database and running on port ' + process.env.port + ' !');

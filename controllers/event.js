@@ -1,5 +1,6 @@
 const eventService = require('../services/event');
 const cityService = require('../services/city');
+const participationService = require('../services/participation');
 const moment = require('moment');
 
 exports.getEvents = async (req, res) => {
@@ -8,10 +9,10 @@ exports.getEvents = async (req, res) => {
     for (var event of events) {
         data.push(manageContent(event));
     }
-    if(data[0]){
+    if (data[0]) {
         res.status(200).json({ data: data });
         return;
-    }else{
+    } else {
         res.status(404).json({ message: "There is no event." });
         return;
     }
@@ -37,7 +38,7 @@ exports.getEventById = async (req, res) => {
 
 exports.createEvent = async (req, res) => {
     try {
-        let isOK= await cityService.isCityOk(req.body.location);
+        let isOK = await cityService.isCityOk(req.body.location);
         if (req.body
             && req.body.name
             && req.body.location && /^[a-zA-Z]+$/.test(req.body.location) && isOK
@@ -79,7 +80,7 @@ exports.deleteEventById = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
     try {
-        let isOK= await cityService.isCityOk(req.body.location);
+        let isOK = await cityService.isCityOk(req.body.location);
         let event = await eventService.getEventById(parseInt(req.params.id));
         if (event) {
             if (req.body) {
@@ -108,6 +109,51 @@ exports.updateEvent = async (req, res) => {
     }
 };
 
+exports.drawAssociationForEvent = async (req, res) => {
+    try {
+        if (parseInt(req.params.id)) {
+            let participation = await participationService.getParticipationByEventId(parseInt(req.params.id));
+            if (participation != null && participation[0] != null) {
+                let k=0
+                while (participation[k]) {
+                    k++;
+                }
+                console.log(participants)
+                if (k < 3) {
+                    res.status(400).json({ message: "Not enought participants." });
+                } else {
+                    let buffer = shuffleArray(participation);
+                    let i = 0;
+                    let assoctiations = participants.length;
+                    console.log(participants)
+                    console.log(buffer)
+                    while (i != assoctiations) {
+                        console.log(participants[i])
+                        console.log(buffer[i])
+                        if (participants[i].dataValues.id != buffer[i].dataValues.id) {
+                            console.log("coucou")
+                            const update = await participationService.updateMemberAttributedId(parseInt(req.params.id), participants[i].dataValues.id, buffer[i].dataValues.id);
+                            i++;
+                        }
+                    }
+                    const draw = await participationService.getParticipationById(parseInt(req.params.id));
+                    console.log(draw)
+                    res.status(200).json({ message: "Draw well done.", draw: draw });
+
+                }
+            } else {
+                res.status(404).json({ message: "There is no participation for this event, you cannot draw." });
+            }
+
+
+        } else {
+            res.status(400).json({ message: "Wrong parameters." });
+        }
+    } catch (error) {
+        res.status(400).json({ message: "Event not updated.", error: error.message });
+    }
+};
+
 function manageContent(event) {
     return {
         "id": event.id,
@@ -122,3 +168,14 @@ function isDateValid(date) {
     const isValid = moment(date).isValid();
     return (isValid && regex.test(date));
 };
+
+function shuffleArray(a) {
+    const array = a;
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
