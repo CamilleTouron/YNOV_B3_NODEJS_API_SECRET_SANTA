@@ -23,7 +23,7 @@ exports.getMemberById = async (req, res) => {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
             const participations = await participation.getParticipationByMemberId(parseInt(req.params.id));
-            res.status(200).json({ data: manageContent(member[0]) , participations: (participations[0]!=undefined?participations:"none") });
+            res.status(200).json({ data: manageContent(member) , participations: (participations[0]!=undefined?participations:"none") });
             return true;
         } else {
             res.status(404).json({ message: "Member does not exist." });

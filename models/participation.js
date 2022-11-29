@@ -12,8 +12,7 @@ module.exports = (instance) => {
             type: DataTypes.INTEGER
         },
         memberAttributedId: {
-            type: DataTypes.INTEGER,
-            allowNull: true
+            type: DataTypes.INTEGER
         },
         eventId: {
             type: DataTypes.INTEGER,

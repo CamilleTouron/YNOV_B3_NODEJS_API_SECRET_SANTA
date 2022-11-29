@@ -1,6 +1,7 @@
 const eventService = require('../services/event');
 const cityService = require('../services/city');
 const participationService = require('../services/participation');
+const participationController = require('../controllers/participation');
 const moment = require('moment');
 
 exports.getEvents = async (req, res) => {
@@ -114,30 +115,21 @@ exports.drawAssociationForEvent = async (req, res) => {
         if (parseInt(req.params.id)) {
             let participation = await participationService.getParticipationByEventId(parseInt(req.params.id));
             if (participation != null && participation[0] != null) {
-                let k=0
+                let participants = [];
+                let k = 0
                 while (participation[k]) {
+                    participants.push(participation[k]);
                     k++;
                 }
-                console.log(participants)
-                if (k < 3) {
+                if (participants.length < 3) {
                     res.status(400).json({ message: "Not enought participants." });
                 } else {
-                    let buffer = shuffleArray(participation);
+                    let buffer = shuffleArray(participants);
                     let i = 0;
-                    let assoctiations = participants.length;
-                    console.log(participants)
-                    console.log(buffer)
-                    while (i != assoctiations) {
-                        console.log(participants[i])
-                        console.log(buffer[i])
-                        if (participants[i].dataValues.id != buffer[i].dataValues.id) {
-                            console.log("coucou")
-                            const update = await participationService.updateMemberAttributedId(parseInt(req.params.id), participants[i].dataValues.id, buffer[i].dataValues.id);
-                            i++;
-                        }
+                    for (i = 0; i < buffer.length; i++) {
+                        await participationController.updateMemberAttributedId(parseInt(req.params.id), parseInt(buffer[(i + 1) % buffer.length].dataValues.memberId), buffer[i].dataValues.memberId);
                     }
-                    const draw = await participationService.getParticipationById(parseInt(req.params.id));
-                    console.log(draw)
+                    const draw = await participationService.getParticipationByEventId(parseInt(req.params.id));
                     res.status(200).json({ message: "Draw well done.", draw: draw });
 
                 }

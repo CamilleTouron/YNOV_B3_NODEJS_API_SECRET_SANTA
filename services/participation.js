@@ -12,7 +12,7 @@ exports.getParticipationById = (id) => {
     });
 };
 
-exports.getParticipationByAssociation = (memberId,eventId) => {
+exports.getParticipationByAssociation = (memberId, eventId) => {
     return dataBase.participation.findOne({
         where: {
             memberId,
@@ -24,7 +24,7 @@ exports.getParticipationByAssociation = (memberId,eventId) => {
 exports.getParticipationByEventId = (eventId) => {
     return dataBase.participation.findAll({
         where: {
-            eventId
+            eventId: eventId
         }
     });
 };
@@ -53,8 +53,8 @@ exports.getParticipationByOrganizer = (isOrganizer) => {
     });
 };
 
-exports.addParticipation = (memberId, eventId, isOrganizer) => {
-    return dataBase.participation.create({ memberId, eventId, isOrganizer });
+exports.addParticipation = (memberId, memberAttributedId,eventId, isOrganizer) => {
+    return dataBase.participation.create({ memberId, memberAttributedId, eventId, isOrganizer });
 };
 
 exports.deleteParticipationById = (id) => {
@@ -91,13 +91,13 @@ exports.updateOrganizer = (id, isOrganizer) => {
         })
 };
 
-exports.updateMemberAttributedId = (id , memberId, memberAttributedId) => {
+exports.updateMemberAttributedId = (id, memberId, memberAttributedId) => {
     return dataBase.participation.update(
-        { memberAttributedId },
+        { memberAttributedId: memberAttributedId },
         {
             where: {
-                id,
-                memberId
+                id: id,
+                memberId: memberId
             }
         })
 };
