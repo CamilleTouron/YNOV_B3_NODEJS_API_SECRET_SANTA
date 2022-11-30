@@ -121,8 +121,8 @@ exports.updateOrganizer = async (id, isOrganizer) => {
     return;
 };
 
-exports.updateMemberAttributedId = async (id, memberId, memberAttributedId) => {
-    await participationService.updateMemberAttributedId(id, memberId, memberAttributedId);
+exports.updateMemberAttributedId = async (eventId, memberId, memberAttributedId) => {
+    await participationService.updateMemberAttributedId(eventId, memberId, memberAttributedId);
     return;
 };
 

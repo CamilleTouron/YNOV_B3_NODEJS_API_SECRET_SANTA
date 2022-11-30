@@ -127,22 +127,25 @@ exports.drawAssociationForEvent = async (req, res) => {
                     let buffer = shuffleArray(participants);
                     let i = 0;
                     for (i = 0; i < buffer.length; i++) {
-                        await participationController.updateMemberAttributedId(parseInt(req.params.id), parseInt(buffer[(i + 1) % buffer.length].dataValues.memberId), buffer[i].dataValues.memberId);
+                        let memberAttributed = 0;
+                        if (buffer[i + 1] && buffer[i + 1].dataValues && buffer[i + 1].dataValues.memberId) {
+                            memberAttributed = buffer[i + 1].dataValues.memberId;
+                        } else {
+                            memberAttributed = buffer[0].dataValues.memberId;
+                        }
+                        await participationController.updateMemberAttributedId(parseInt(req.params.id), buffer[i].dataValues.memberId, memberAttributed);
                     }
                     const draw = await participationService.getParticipationByEventId(parseInt(req.params.id));
                     res.status(200).json({ message: "Draw well done.", draw: draw });
-
                 }
             } else {
                 res.status(404).json({ message: "There is no participation for this event, you cannot draw." });
             }
-
-
         } else {
             res.status(400).json({ message: "Wrong parameters." });
         }
     } catch (error) {
-        res.status(400).json({ message: "Event not updated.", error: error.message });
+        res.status(400).json({ message: "Draw was not able to be made.", error: error.message });
     }
 };
 

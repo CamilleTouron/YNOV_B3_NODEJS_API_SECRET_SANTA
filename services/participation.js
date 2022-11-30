@@ -52,6 +52,15 @@ exports.getParticipationByOrganizer = (isOrganizer) => {
         }
     });
 };
+exports.getParticipation = (memberId, id) => {
+    console.log("get",id, memberId)
+    return dataBase.participation.findOne({
+        where: {
+            memberId,
+            id
+        }
+    });
+};
 
 exports.addParticipation = (memberId, memberAttributedId,eventId, isOrganizer) => {
     return dataBase.participation.create({ memberId, memberAttributedId, eventId, isOrganizer });
@@ -91,12 +100,12 @@ exports.updateOrganizer = (id, isOrganizer) => {
         })
 };
 
-exports.updateMemberAttributedId = (id, memberId, memberAttributedId) => {
-    return dataBase.participation.update(
+exports.updateMemberAttributedId = async (eventId, memberId, memberAttributedId) => {
+    return await dataBase.participation.update(
         { memberAttributedId: memberAttributedId },
         {
             where: {
-                id: id,
+                eventId: eventId,
                 memberId: memberId
             }
         })
