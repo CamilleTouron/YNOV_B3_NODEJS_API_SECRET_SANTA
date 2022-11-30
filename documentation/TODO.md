@@ -1,8 +1,8 @@
-- Logger qui ecrit dans un fichier. 
 - Test jest.
+- Jeu de donnees.
+- Logger qui ecrit dans un fichier. 
 - Check yaml.
 - Finir readme.
-- Déployer.
-- Tirage.
-- Jeu de donnees.
+- Serveur smtp.
 - Formater tout les fichiers.
+- Déployer.
