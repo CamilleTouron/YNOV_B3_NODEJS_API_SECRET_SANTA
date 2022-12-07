@@ -1,8 +1,9 @@
 - Test jest.
-- Jeu de donnees.
-- Logger qui ecrit dans un fichier. 
-- Check yaml.
-- Finir readme.
-- Serveur smtp.
 - Formater tout les fichiers.
+
+Après rendu :
+- Systeme de demande à l'admin.
+- Gestion d'après tirage.
+- Logger qui ecrit dans un fichier. 
+- Serveur smtp et requete d'envoie de mail.
 - Déployer.

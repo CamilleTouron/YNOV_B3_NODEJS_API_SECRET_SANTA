@@ -1,5 +1,7 @@
 # **API for Secret Santa Event**
 
+Dev : Camille TOURON
+
 ## **What is a Secret Santa Event :**
 
 For Christmas Eve, to make sure that everyone are getting and offering gift we can organize a Secret Santa. Each member secretly draws another member to buy him a gift. Then when the moment come Secret Santa reveals by offering the gift to the attributed member. To be fair a price limit is set.
@@ -32,7 +34,7 @@ Every Organizer and Participants are members but they get different right accord
 
 - GET admin rights request.
 
-- Organizer :
+### Organizer :
 
 - GET/DELETE/POST on the event concerned.
 
@@ -46,7 +48,7 @@ Every Organizer and Participants are members but they get different right accord
 
 - POST to request ADMIN to DELETE him.
 
-- Everyone :
+### Everyone :
 
 - GET to login.
 
