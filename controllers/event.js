@@ -23,7 +23,7 @@ exports.getEventById = async (req, res) => {
     try {
         let event = await eventService.getEventById(parseInt(req.params.id));
         if (event) {
-            res.json({data: manageContent(event)});
+            res.json({ data: manageContent(event) });
             return true;
         } else {
             res.status(404).json({ message: "Event does not exist." });

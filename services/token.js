@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-function getPayload(isAdmin,memberId) {
+function getPayload(isAdmin, memberId) {
     return {
         "date": new Date(),
         "isAdmin": isAdmin,
@@ -9,16 +9,17 @@ function getPayload(isAdmin,memberId) {
     }
 }
 
-exports.getToken = (isAdmin,memberId) => {
+exports.getToken = (isAdmin, memberId) => {
     try {
-        const retult = jwt.sign({ data: getPayload(isAdmin,memberId) }, process.env.SECRET, { expiresIn: process.env.TOKEN_TIMEOUT });
-        return retult;
+        const token = jwt.sign({ data: getPayload(isAdmin, memberId) }, process.env.SECRET, { expiresIn: process.env.TOKEN_TIMEOUT });
+        console.log(token)
+        return token;
     } catch (error) {
         throw new Error('Pbm generating token' + error);
     }
 }
 
-exports.checkToken =  (token) => {
+exports.checkToken = (token) => {
     try {
         const result = jwt.verify(token, process.env.SECRET);
         return result;
@@ -47,7 +48,7 @@ exports.getMemberIdFromToken = (token) => {
     try {
         if (this.checkToken(token)) {
             const id = jwt.decode(token).data.memberId;
-            if (id!=null) {
+            if (id != null) {
                 return id;
             } else {
                 return null;

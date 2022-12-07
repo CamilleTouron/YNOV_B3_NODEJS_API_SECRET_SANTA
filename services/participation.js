@@ -53,7 +53,7 @@ exports.getParticipationByOrganizer = (isOrganizer) => {
     });
 };
 exports.getParticipation = (memberId, id) => {
-    console.log("get",id, memberId)
+    console.log("get", id, memberId)
     return dataBase.participation.findOne({
         where: {
             memberId,
@@ -62,7 +62,7 @@ exports.getParticipation = (memberId, id) => {
     });
 };
 
-exports.addParticipation = (memberId, memberAttributedId,eventId, isOrganizer) => {
+exports.addParticipation = (memberId, memberAttributedId, eventId, isOrganizer) => {
     return dataBase.participation.create({ memberId, memberAttributedId, eventId, isOrganizer });
 };
 

@@ -26,7 +26,7 @@ app.use('/cache', cacheRouter);
 
 //Needs to be here to get all app's routes
 exports.getHelp = (req, res) => {
-    res.status(200).json({content: all_routes(app)});
+    res.status(200).json({ content: all_routes(app) });
 };
 helpRouter.get('/', authService.authAdmin, this.getHelp);
 app.use('/help', helpRouter)
@@ -37,7 +37,7 @@ app.use((error, req, res, next) => {
     if (error.status != null) {
         res.status(error.status).json({ message: error.message });
     } else {
-        res.status(500).json({ message: "Server error." , error : error.message});
+        res.status(500).json({ message: "Server error.", error: error.message });
     }
 });
 

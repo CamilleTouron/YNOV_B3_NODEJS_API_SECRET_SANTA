@@ -64,7 +64,6 @@ exports.login = async (req, res) => {
     try {
         if (req.body.mail && req.body.mail.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
             && req.body.password && !/\s/.test(req.body.password)) {
-
             const member = await memberService.getMemberByMail(req.body.mail);
             if (member && member.password) {
                 const passwordEncoded = passwordService.compare(req.body.password, member.password)

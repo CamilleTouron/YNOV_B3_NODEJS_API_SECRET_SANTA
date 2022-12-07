@@ -6,7 +6,7 @@ const instance = new Sequelize({
     storage: configuration.storage,
     dialectOptions: {
         dateStrings: true
-      },
+    },
 });
 
 module.exports = {
