@@ -91,3 +91,29 @@ npm start:prod
 npm test
 
 ```
+
+### JDD - LOGIN:
+La requete LOGIN renvoie un token qu'il faut insérer dans la variable de la collection Postman. Voici différents body de requetes :
+#### Admin :
+```json
+{
+    "mail":"touroncamille@icloud.com",
+    "password":"admin"
+}
+```
+
+#### Organizer event 1 :
+```json
+{
+    "mail":"micket@icloud.com",
+    "password":"micket"
+}
+```
+
+#### Member who's neither admin neither organizer of event 1 :
+```json
+{
+    "mail":"newman@icloud.com",
+    "password":"newman"
+}
+```
