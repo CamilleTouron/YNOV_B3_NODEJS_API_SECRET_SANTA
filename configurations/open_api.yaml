@@ -22,8 +22,6 @@ tags:
     description: Everything about events.
   - name: participations
     description: Everything about participations.
-  - name: request
-    description: Everything about request.
   - name: admin
     description: Everything for admin.
 paths:
@@ -44,7 +42,7 @@ paths:
         - member
         - admin
       summary: login
-      description: login
+      description: Route to get a token to be authenticate.
       requestBody:
           $ref: "#/components/requestBodies/Login"
       responses:
@@ -54,8 +52,8 @@ paths:
     delete:
       tags:
         - cache
-      summary: delete server cache
-      description: delete server cache
+      summary: Delete server cache.
+      description: Delete server cache.
       security:
         - auth: []
       responses:
@@ -66,7 +64,7 @@ paths:
       tags:
         - member
       summary: Get all members.
-      description: ""
+      description: Get all members.
       security:
         - auth: []
       responses:
@@ -90,7 +88,7 @@ paths:
     get:
       tags:
         - member
-      summary: Get all members.
+      summary: Get member by id.
       description: Get member by id.
       security:
         - auth: []
@@ -150,7 +148,7 @@ paths:
       tags:
         - event
       summary: Get all events.
-      description: ""
+      description: Get all events.
       security:
         - auth: []
       responses:
@@ -176,7 +174,7 @@ paths:
     get:
       tags:
         - event
-      summary: Get event.
+      summary: Get event by id.
       description: Get event by id.
       security:
         - auth: []
@@ -236,7 +234,7 @@ paths:
       tags:
         - participation
       summary: Get all participations.
-      description: ""
+      description:  Get all participations.
       security:
         - auth: []
       responses:
@@ -262,7 +260,7 @@ paths:
     get:
       tags:
         - participation
-      summary: Get participation.
+      summary: Get participation by id.
       description: Get participation by id.
       security:
         - auth: []
@@ -284,7 +282,7 @@ paths:
     delete:
       tags:
         - participation
-      summary: Delete participation.
+      summary: Delete participation by id.
       description: Delete participation by id.
       security:
         - auth: []
@@ -354,10 +352,10 @@ components:
       properties:
         mail:
             type: string
-            example: "TheBoss"
+            example: "touroncamille@icloud.com"
         password:
           type: string
-          example: "etvhtrdvtyesvy"
+          example: "00TheBigBoss00"
       xml:
         name: Login
     Member:
