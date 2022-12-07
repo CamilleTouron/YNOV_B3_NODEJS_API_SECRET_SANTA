@@ -28,7 +28,7 @@ exports.authAdmin = async (req, res, next) => {
             if (tokenService.isAdminToken(token)) {
                 next();
             } else {
-                res.status(401).json({ message: 'Token is not valid.' });
+                res.status(401).json({ message: 'Token is not an admin token.' });
             }
         } catch (error) {
             next(error);

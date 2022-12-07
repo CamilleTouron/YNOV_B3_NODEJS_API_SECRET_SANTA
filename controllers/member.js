@@ -9,10 +9,10 @@ exports.getMembers = async (req, res) => {
     for (var member of members) {
         data.push(manageContent(member));
     }
-    if(data[0]){
+    if (data[0]) {
         res.status(200).json({ data: data });
         return;
-    }else{
+    } else {
         res.status(404).json({ message: "There is no participation." });
         return;
     }
@@ -23,7 +23,7 @@ exports.getMemberById = async (req, res) => {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
             const participations = await participation.getParticipationByMemberId(parseInt(req.params.id));
-            res.status(200).json({ data: manageContent(member) , participations: (participations[0]!=undefined?participations:"none") });
+            res.status(200).json({ data: manageContent(member), participations: (participations[0] != undefined ? participations : "none") });
             return true;
         } else {
             res.status(404).json({ message: "Member does not exist." });
@@ -42,7 +42,7 @@ exports.createMember = async (req, res) => {
         if (req.body && req.body.firstname && /^[a-zA-Z]+$/.test(req.body.firstname) && req.body.firstname != process.env.ADMIN_FIRSTNAME
             && req.body.lastname && /^[a-zA-Z]+$/.test(req.body.lastName) && req.body.firstname != process.env.ADMIN_LASTNAME
             && req.body.mail && req.body.mail.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-            && req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)
+            && (req.body.isAdmin === true || req.body.isAdmin === false)
             && req.body.password && !/\s/.test(req.body.password)) {
             let member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
             if (member && member.mail) {
@@ -68,7 +68,7 @@ exports.createMember = async (req, res) => {
 exports.deleteMemberById = async (req, res) => {
     if (req.params.id) {
         const member = await memberService.getMemberById(req.params.id);
-        if (member && member.isAdmin==false) {
+        if (member && member.isAdmin == false) {
             await memberService.deleteMemberById(req.params.id);
             await participation.deleteParticipationByMemberId(req.params.id)
             res.json({ message: "Member well deleted." });
@@ -94,20 +94,19 @@ exports.doAdminExist = async () => {
 };
 
 exports.createAdmin = async () => {
-    let admin = memberService.getAdmin();
+    let admin = await memberService.getAdmin();
     try {
-        if (admin.dataValues != null && admin.dataValues.mail != null) {
+        if (admin && admin.dataValues != null && admin.dataValues.mail != null) {
             return;
         } else {
             memberService.addMember(process.env.ADMIN_LASTNAME, process.env.ADMIN_FIRSTNAME, process.env.ADMIN_MAIL, true, passwordService.crypt(process.env.ADMIN_PWD));
-            admin = memberService.getAdmin();
-            if (admin.dataValues != null && admin.dataValues.mail != null) {
+            admin = await memberService.getAdmin();
+            if (!admin.dataValues && !admin.dataValues.mail) {
                 throw new Error("Failed to create Admin so server cannot start.");
             }
         }
     } catch (error) {
-        throw new Error("Failed to create Admin so server cannot start."+error);
-
+        throw new Error("Failed to create Admin so server cannot start." + error);
     }
 };
 
@@ -139,7 +138,7 @@ exports.updateMember = async (req, res) => {
             res.status(404).json({ message: "Member not found." });
         }
     } catch (error) {
-        res.status(400).json({ message: "Error creating member.", error : error.message });
+        res.status(400).json({ message: "Error creating member.", error: error.message });
     }
 };
 

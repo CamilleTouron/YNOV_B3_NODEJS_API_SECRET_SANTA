@@ -6,7 +6,7 @@ exports.getMembers = () => {
 };
 
 exports.getAdmin = () => {
-    return dataBase.member.findAll({
+    return dataBase.member.findOne({
         limit: 1,
         where: {
             firstname: process.env.ADMIN_FIRSTNAME,

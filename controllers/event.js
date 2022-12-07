@@ -22,8 +22,8 @@ exports.getEvents = async (req, res) => {
 exports.getEventById = async (req, res) => {
     try {
         let event = await eventService.getEventById(parseInt(req.params.id));
-        if (event[0]) {
-            res.json({ data: manageContent(event[0]) });
+        if (event) {
+            res.json({data: manageContent(event)});
             return true;
         } else {
             res.status(404).json({ message: "Event does not exist." });
