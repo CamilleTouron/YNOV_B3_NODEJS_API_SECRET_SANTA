@@ -110,14 +110,14 @@ paths:
     delete:
       tags:
         - member
-      summary: Delete member.
-      description: Delete member by id.
+      summary: Request to delete member.
+      description: Request to delete member by id member.
       security:
         - auth: []
       parameters:
         - name: id
           in: path
-          description: Id de l'adhérent.
+          description: Id member.
           required: true
           schema:
             type: integer
@@ -134,12 +134,30 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Id de l'adhérent.
+          description: Id member.
           required: true
           schema:
             type: integer
       requestBody:
           $ref: "#/components/requestBodies/MemberCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /member/admin/{id}:
+    delete:
+      tags:
+        - member
+      summary: Delete member.
+      description: Delete member by id.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id member.
+          required: true
+          schema:
+            type: integer
       responses:
         "500":
           $ref: "#/components/responses/ServerError"

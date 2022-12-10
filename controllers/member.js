@@ -1,6 +1,7 @@
 const memberService = require('../services/member');
 const passwordService = require('../services/password');
 const participation = require('../services/participation');
+const administrationService = require('./administration');
 require('dotenv').config();
 
 exports.getMembers = async (req, res) => {
@@ -49,13 +50,18 @@ exports.createMember = async (req, res) => {
                 res.status(400).json({ message: "Member with this mail already exist." });
                 return;
             }
-            await memberService.addMember(req.body.lastname, req.body.firstname, req.body.mail.toLowerCase(), req.body.isAdmin, passwordService.crypt(req.body.password));
+            await memberService.addMember(req.body.lastname, req.body.firstname, req.body.mail.toLowerCase(), false, passwordService.crypt(req.body.password));
             member = await memberService.getMemberByMail(req.body.mail.toLowerCase());
             if (!member.mail) {
                 res.status(400).json({ message: "Member not created." });
                 return;
             }
-            res.status(201).json({ message: "Member well created." });
+            if (req.body.isAdmin === true) {
+                const isRequest = await administrationService.create(member.id, "Request to be admin.");
+                res.status(201).json({ message: "Member well created, request to be admin has been send." });
+            } else {
+                res.status(201).json({ message: "Member well created." });
+            }
         } else {
             res.status(400).json({ message: "Wrong parameters." });
         }
@@ -65,13 +71,31 @@ exports.createMember = async (req, res) => {
 
 };
 
-exports.deleteMemberById = async (req, res) => {
+exports.deleteMemberByIdAdmin = async (req, res) => {
     if (req.params.id) {
         const member = await memberService.getMemberById(req.params.id);
         if (member && member.isAdmin == false) {
             await memberService.deleteMemberById(req.params.id);
             await participation.deleteParticipationByMemberId(req.params.id)
             res.json({ message: "Member well deleted." });
+        } else {
+            res.status(404).json({ message: "Member not found or cannot delete admin." });
+        }
+    } else {
+        res.status(400).json({ message: "Wrong parameters." });
+    }
+};
+
+exports.deleteMemberById = async (req, res) => {
+    if (req.params.id) {
+        const member = await memberService.getMemberById(req.params.id);
+        if (member && member.isAdmin == false) {
+            const request = administrationService.create(req.params.id, "Delete my account.");
+            if (request) {
+                res.json({ message: "A request to delete account has been send." });
+            } else {
+                res.status(400).json({ message: "Deletion did not work." });
+            }
         } else {
             res.status(404).json({ message: "Member not found or cannot delete admin." });
         }
@@ -129,14 +153,14 @@ exports.updateMember = async (req, res) => {
                     changes.push("mail");
                 }
                 if (req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)) {
-                    await memberService.updateAdminStatus(req.params.id, req.body.isAdmin);
-                    changes.push("isAdmin");
+                    await administrationService.create(req.params.id, "Request to be admin.");
+                    changes.push("A request has been send to admins to change admin status for this member.");
                 }
                 if (req.body.password && !/\s/.test(req.body.password)) {
                     await memberService.updatePassword(req.params.id, passwordService.crypt(req.body.password));
                     changes.push("password");
                 }
-                res.status(200).json({ message: "Update well done." , changes});
+                res.status(200).json({ message: "Update well done.", changes });
             } else {
                 res.status(400).json({ message: "Wrong parameters." });
             }
