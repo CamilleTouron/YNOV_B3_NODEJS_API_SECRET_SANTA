@@ -1,0 +1,18 @@
+version: "1"
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: SECRET_SANTA_API
+    environment:
+     - PORT=3003
+     - ADMIN_FIRSTNAME=admin
+     - ADMIN_LASTNAME=admin
+     - ADMIN_PWD=admin
+     - ADMIN_MAIL=touroncamille@icloud.com
+     - SECRET=10
+     - FORCE=false
+     - TOKEN_TIMEOUT=2h
+    ports:
+      - "3003:3003"

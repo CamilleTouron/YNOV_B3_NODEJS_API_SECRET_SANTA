@@ -121,3 +121,9 @@ La requete LOGIN renvoie un token qu'il faut insérer dans la variable de la col
     "password":"newman"
 }
 ```
+
+## Déployer avec Docker :
+### Run with Docker :
+```console
+docker compose up --force-recreate
+```
