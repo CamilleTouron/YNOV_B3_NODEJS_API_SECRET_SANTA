@@ -7,7 +7,7 @@ exports.isCityOk = async (city) => {
             headers: { Accept: 'application/json', 'Accept-Encoding': 'identity' }
         }).then((result) => {
             if (result && result.data) {
-                let toCompare = JSON.stringify(result.data.features);//.toLowerCase()
+                const toCompare = JSON.stringify(result.data.features);
                 if (toCompare.search(new RegExp(city, "i")) > 0) {
                     return true;
                 } else {

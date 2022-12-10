@@ -1,5 +1,4 @@
 - Test jest.
-- Formater tout les fichiers.
 
 Après rendu :
 - Systeme de demande à l'admin.

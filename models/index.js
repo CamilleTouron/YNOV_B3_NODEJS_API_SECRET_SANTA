@@ -13,5 +13,6 @@ module.exports = {
     instance,
     member: require('./member')(instance),
     event: require('./event')(instance),
-    participation: require('./participation')(instance)
+    participation: require('./participation')(instance),
+    administration: require('./administration')(instance)
 };
