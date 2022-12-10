@@ -6,6 +6,7 @@ const memberRouter = require('./routers/member');
 const eventRouter = require('./routers/event');
 const participationRouter = require('./routers/participation');
 const cacheRouter = require('./routers/cache');
+const administrationRouter = require('./routers/administration');
 const helpRouter = express.Router();
 const authService = require('./controllers/login');
 const all_routes = require('express-list-endpoints');
@@ -22,6 +23,7 @@ app.use('/login', loginRouter);
 app.use('/member', memberRouter);
 app.use('/event', eventRouter);
 app.use('/participation', participationRouter);
+app.use('/administration', administrationRouter);
 app.use('/cache', cacheRouter);
 
 //Needs to be here to get all app's routes

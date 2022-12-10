@@ -1,6 +1,6 @@
 const dataBase = require('../models');
 
-exports.getAdministration = () => {
+exports.getAdministrations = () => {
     return dataBase.administration.findAll();
 };
 
@@ -32,7 +32,7 @@ exports.addAdministration = (idApplicant, application) => {
     return dataBase.administration.create({ idAdmin: null, idApplicant, isDone: false, application });
 };
 
-exports.deleteAdministrationByIdAdministration = (id) => {
+exports.deleteAdministrationById= (id) => {
     return dataBase.administration.destroy({
         where: {
             id
