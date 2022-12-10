@@ -577,6 +577,12 @@ components:
         location:
           type: string
           example: "Toulouse"
+        priceLimit:
+          type: integer
+          example: 10
+        theme:
+          type: string
+          example: "Cowboy"  
       xml:
         name: EventForShowing
     EventsForShowing:

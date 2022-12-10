@@ -9,14 +9,25 @@ module.exports = (instance) => {
             allowNull: false
         },
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
         end: {
-            type: DataTypes.DATEONLY
+            type: DataTypes.DATEONLY,
+            allowNull: false
         },
         location: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        priceLimit: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        theme: {
+            type: DataTypes.INTEGER
         }
+
     }, {
         timestamps: false,
         freezeTableName: true

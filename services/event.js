@@ -19,8 +19,8 @@ exports.getEventByName = (name) => {
     });
 };
 
-exports.addEvent = (name, end, location) => {
-    return dataBase.event.create({ name, end, location });
+exports.addEvent = (name, end, location, priceLimit, theme) => {
+    return dataBase.event.create({ name, end, location, priceLimit, theme });
 };
 
 exports.deleteEventById = (id) => {
@@ -52,6 +52,26 @@ exports.updateDate = (id, date) => {
 exports.updateLocation = (id, location) => {
     return dataBase.event.update(
         { location: location },
+        {
+            where: {
+                id: id
+            }
+        })
+};
+
+exports.updatePriceLimit = (id, priceLimit) => {
+    return dataBase.event.update(
+        { priceLimit: priceLimit },
+        {
+            where: {
+                id: id
+            }
+        })
+};
+
+exports.updateTheme = (id, theme) => {
+    return dataBase.event.update(
+        { theme: theme },
         {
             where: {
                 id: id

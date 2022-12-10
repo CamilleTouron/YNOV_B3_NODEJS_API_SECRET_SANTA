@@ -43,13 +43,14 @@ exports.createEvent = async (req, res) => {
         if (req.body
             && req.body.name
             && req.body.location && /^[a-zA-Z]+$/.test(req.body.location) && isOK
-            && req.body.end && isDateValid(req.body.end)) {
+            && req.body.end && isDateValid(req.body.end)
+            && req.body.priceLimit!=null && !parceInt(req.body.priceLimit)<0 ) {
             let event = await eventService.getEventByName(req.body.name.toLowerCase());
             if (event[0] && event[0].name) {
                 res.status(400).json({ message: "Event with this name already exist." });
                 return;
             }
-            await eventService.addEvent(req.body.name.toLowerCase(), req.body.end, req.body.location);
+            await eventService.addEvent(req.body.name.toLowerCase(), req.body.end, req.body.location,parceInt(req.body.priceLimit),req.body.theme);
             event = await eventService.getEventByName(req.body.name.toLowerCase());
             if (!event[0].name) {
                 res.status(400).json({ message: "Event not created." });
@@ -87,16 +88,24 @@ exports.updateEvent = async (req, res) => {
             if (req.body) {
                 let changes = [];
                 if (req.body.name) {
-                    eventService.updateName(req.params.id, req.body.name.toLowerCase());
+                    await eventService.updateName(req.params.id, req.body.name.toLowerCase());
                     changes.push("name");
                 }
                 if (req.body.location && /^[a-zA-Z]+$/.test(req.body.location) && isOK) {
-                    eventService.updateLocation(req.params.id, req.body.location.toLowerCase());
+                    await eventService.updateLocation(req.params.id, req.body.location.toLowerCase());
                     changes.push("location");
                 }
                 if (req.body.end && isDateValid(req.body.end)) {
-                    eventService.updateDate(req.params.id, req.body.end);
+                    await eventService.updateDate(req.params.id, req.body.end);
                     changes.push("end");
+                }
+                if(req.body.priceLimit!=null && !parceInt(req.body.priceLimit)<0){
+                    await eventService.updatePriceLimit(req.params.id, req.body.priceLimit);
+                    changes.push("priceLimit");
+                }
+                if(req.body.theme){
+                    await eventService.updateTheme(req.params.id, req.body.theme);
+                    changes.push("theme");
                 }
                 res.status(200).json({ message: "Update well done.", changes: changes });
             } else {
@@ -154,7 +163,9 @@ function manageContent(event) {
         "id": event.id,
         "name": event.name,
         "location": event.location,
-        "end": event.end
+        "end": event.end,
+        "priceLimit": event.priceLimit,
+        "theme":event.theme
     }
 };
 
