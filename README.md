@@ -64,6 +64,8 @@ git init
 
 git clone https://github.com/CamilleTouron/NODEJS_API_SECRET_SANTA.git
 
+npm install
+
 ```
 
   
