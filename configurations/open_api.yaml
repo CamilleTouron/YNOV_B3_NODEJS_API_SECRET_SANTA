@@ -326,7 +326,171 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Id member.
+          description: Id event.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /administration/{id}:
+    get:
+      tags:
+        - admin
+      summary: Get administration by id.
+      description: Get administration by id.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id administration.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministrationForShowing'
+    delete:
+      tags:
+        - admin
+      summary: Delete administration by id.
+      description: Delete administration by id.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id administration.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+    patch:
+      tags:
+        - admin
+      summary: Get administration by id.
+      description: Get administration by id.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id administration.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /administration:
+    get:
+      tags:
+        - admin
+      summary: Get all administrations.
+      description: Get all administrations.
+      security:
+        - auth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministrationsForShowing'
+    post:
+      tags:
+        - admin
+      summary: Create administration.
+      description: Create administration.
+      security:
+        - auth: []
+      requestBody:
+          $ref: "#/components/requestBodies/AdministrationCreation"
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /administration/admin/{id}:
+    get:
+      tags:
+        - admin
+      summary: Get administrations by id admin.
+      description: Get administrations by id admin.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id admin.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministrationForShowing'
+    delete:
+      tags:
+        - admin
+      summary: Delete administrations by id admin.
+      description: Delete administrations by id admin.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id admin.
+          required: true
+          schema:
+            type: integer
+      responses:
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /administration/applicant/{id}:
+    get:
+      tags:
+        - admin
+      summary: Get administrations by id applicant.
+      description: Get administrations by id applicant.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id admin applicant.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdministrationForShowing'
+    delete:
+      tags:
+        - admin
+      summary: Delete administrations by id applicant.
+      description: Delete administrations by id applicant.
+      security:
+        - auth: []
+      parameters:
+        - name: id
+          in: path
+          description: Id applicant.
           required: true
           schema:
             type: integer
@@ -421,6 +585,32 @@ components:
         wrapped: true
       items:
         $ref: "#/components/schemas/EventForShowing"
+    AdministrationForShowing:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        idAdmin:
+          type: integer
+          example: 1
+        idApplicant:
+          type: integer
+          example: 56
+        isDone:
+          type: boolean
+          example: true
+        application:
+          type: string
+          example: "Be admin."
+      xml:
+        name: EventForShowing
+    AdministrationsForShowing:
+      type: array
+      xml:
+        wrapped: true
+      items:
+        $ref: "#/components/schemas/AdministrationForShowing"
     ParticipationForShowing:
       type: object
       properties:
@@ -444,6 +634,17 @@ components:
         wrapped: true
       items:
         $ref: "#/components/schemas/ParticipationForShowing"
+    AdministrationForCreation:
+      type: object
+      properties:
+        idApplicant:
+          type: integer
+          example: 1
+        application:
+          type: string
+          example: "Be admin."
+      xml:
+        name: AdministrationForCreation
   requestBodies:
     Login:
       required: true
@@ -466,6 +667,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/EventForShowing'
+    AdministrationCreation:
+      required: true
+      description: Creation request body.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AdministrationForCreation'
     ParticipationCreation:
       required: true
       description: Participation creation request body.

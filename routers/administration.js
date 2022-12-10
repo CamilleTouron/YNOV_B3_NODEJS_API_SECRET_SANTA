@@ -14,6 +14,6 @@ router.get('/admin/:id', authService.authAdmin, administrationController.getAdmi
 router.delete('/admin/:id', authService.authAdmin, administrationController.deleteAdministrationByIdAdmin);
 
 router.get('/applicant/:id', authService.authAdmin, administrationController.getAdministrationsByIdApplicant);
-router.delete('/admin/:id', authService.authAdmin, administrationController.deleteAdministrationByIdApplicant);
+router.delete('/applicant/:id', authService.authAdmin, administrationController.deleteAdministrationByIdApplicant);
 
 module.exports = router;
