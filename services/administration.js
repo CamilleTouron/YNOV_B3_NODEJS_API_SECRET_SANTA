@@ -29,7 +29,7 @@ exports.getAdministrationByIdApplicant = (idApplicant) => {
 };
 
 exports.addAdministration = (idApplicant, application) => {
-    return dataBase.administration.create({ idAdmin: null, idApplicant, isDone: false, application });
+    return dataBase.administration.create({ idAdmin: null, idApplicant:idApplicant, isDone: false,application:application });
 };
 
 exports.deleteAdministrationById= (id) => {

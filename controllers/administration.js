@@ -1,4 +1,5 @@
 const administrationService = require('../services/administration');
+const memberService = require('../services/member');
 
 exports.getAdministrations = async (req, res) => {
     const administrations = await administrationService.getAdministrations();
@@ -40,7 +41,7 @@ exports.getAdministrationsByIdApplicant = async (req, res) => {
         res.status(200).json({ data: data });
         return;
     } else {
-        res.status(404).json({ message: "There is no adminstration with this admin id." });
+        res.status(404).json({ message: "There is no adminstration with this applicant id." });
         return;
     }
 };
@@ -67,13 +68,18 @@ exports.createAdministration = async (req, res) => {
     try {
         if (req.body
             && req.body.idApplicant
-            && req.body.applicattion) {
-            const administration = await this.create(req.body.idApplicant && req.body.applicattion);
-            if (!administration) {
-                res.status(400).json({ message: "Administration not created." });
-                return;
+            && req.body.application) {
+            const member = await memberService.getMemberById(req.body.idApplicant);
+            if (member) {
+                const administration = await this.create(req.body.idApplicant, req.body.application);
+                if (!administration) {
+                    res.status(400).json({ message: "Administration not created." });
+                    return;
+                }
+                res.status(201).json({ message: "Administration well created." });
+            }else{
+                res.status(404).json({ message: "idApplicant does not match any member id." });
             }
-            res.status(201).json({ message: "Administration well created." });
         } else {
             res.status(400).json({ message: "Wrong parameters." });
         }
@@ -85,9 +91,9 @@ exports.createAdministration = async (req, res) => {
 
 exports.deleteAdministrationById = async (req, res) => {
     if (req.params.id) {
-        const administration = administrationService.getAdministrationById(req.params.id);
+        const administration = await administrationService.getAdministrationById(req.params.id);
         if (administration) {
-            const deletion = administrationService.deleteAdministrationById(req.params.id);
+            const deletion = await administrationService.deleteAdministrationById(req.params.id);
             if (deletion) {
                 res.status(200).json({ message: "Adminitration well deleted." });
             } else {
@@ -103,9 +109,9 @@ exports.deleteAdministrationById = async (req, res) => {
 
 exports.deleteAdministrationByIdAdmin = async (req, res) => {
     if (req.params.id) {
-        const administration = administrationService.getAdministrationByIdAdmin(req.params.id);
+        const administration = await administrationService.getAdministrationByIdAdmin(req.params.id);
         if (administration) {
-            const deletion = administrationService.deleteAdministrationByIdAdmin(req.params.id);
+            const deletion = await administrationService.deleteAdministrationByIdAdmin(req.params.id);
             if (deletion) {
                 res.status(200).json({ message: "Adminitration well deleted." });
             } else {
@@ -121,9 +127,9 @@ exports.deleteAdministrationByIdAdmin = async (req, res) => {
 
 exports.deleteAdministrationByIdApplicant = async (req, res) => {
     if (req.params.id) {
-        const administration = administrationService.getAdministrationByIdApplicant(req.params.id);
+        const administration = await administrationService.getAdministrationByIdApplicant(req.params.id);
         if (administration) {
-            const deletion = administrationService.deleteAdministrationByIdApplicant(req.params.id);
+            const deletion = await administrationService.deleteAdministrationByIdApplicant(req.params.id);
             if (deletion) {
                 res.status(200).json({ message: "Adminitration well deleted." });
             } else {
@@ -141,14 +147,19 @@ exports.updateAdministration = async (req, res) => {
     try {
         const administration = await administrationService.getAdministrationById(parseInt(req.params.id));
         if (administration) {
-            if (req.body && req.body.id && req.body.idAdmin && req.body.isDone) {
-                const changeIdAdmin = await this.updateIdAdmin(req.body.id, req.body.idAdmin);
-                const changeIsDone = await this.updateIsDone(req.body.id, req.body.isDone);
-                console.log(changeIdAdmin, changeIsDone);
-                if (changeIdAdmin && changeIsDone) {
-                    res.status(200).json({ message: "Update well done." });
-                } else {
-                    res.status(400).json({ message: "Update not done." });
+            if (req.body && req.params.id && req.body.idAdmin && req.body.isDone != null) {
+                const member = await memberService.isAdmin(req.body.idAdmin, req.body.isDone);
+                if(member){
+                    const changeIdAdmin = await this.updateIdAdmin(req.params.id, req.body.idAdmin);
+                    const changeIsDone = await this.updateIsDone(req.params.id, req.body.isDone);
+                    console.log(changeIdAdmin, changeIsDone);
+                    if (changeIdAdmin && changeIsDone) {
+                        res.status(200).json({ message: "Update well done." });
+                    } else {
+                        res.status(400).json({ message: "Update not done." });
+                    }
+                }else{
+                    res.status(404).json({ message: "idAdmin does not match with any admin id." });
                 }
             } else {
                 res.status(400).json({ message: "Wrong parameters." });
@@ -171,12 +182,11 @@ exports.updateIsDone = async (id, isDone) => {
     return changes ? true : false
 }
 
-exports.create = async (idApplicant, applicattion) => {
-    if (idApplicant && applicattion) {
-        const administration = await administrationService.addAdministration(req.body.idApplicant, req.body.applicattion);
-        console.log(administration)
+exports.create = async (idApplicant, application) => {
+    if (idApplicant && application) {
+        const administration = await administrationService.addAdministration(idApplicant, application);
         return administration ? true : false;
-    }else{
+    } else {
         return false;
     }
 }

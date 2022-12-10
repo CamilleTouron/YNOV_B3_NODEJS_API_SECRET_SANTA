@@ -5,7 +5,7 @@ exports.getMembers = () => {
     return dataBase.member.findAll();
 };
 
-exports.getAdmin = () => {
+exports.getMainAdmin = () => {
     return dataBase.member.findOne({
         limit: 1,
         where: {
@@ -14,6 +14,16 @@ exports.getAdmin = () => {
         },
     });
 };
+
+exports.isAdmin = (id,isAdmin) => {
+    return dataBase.member.findOne({
+        where: {
+            id,
+            isAdmin
+        }
+    });
+};
+
 
 exports.getMemberById = (id) => {
     return dataBase.member.findOne({

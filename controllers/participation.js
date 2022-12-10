@@ -80,7 +80,7 @@ exports.deleteParticipationById = async (req, res) => {
     if (req.params.id) {
         const participation = participationService.getParticipationById(req.params.id);
         if (participation) {
-            participationService.deleteParticipationById(req.params.id);
+            await participationService.deleteParticipationById(req.params.id);
             res.json({ message: "Participation well deleted." });
         } else {
             res.status(404).json({ message: "Participation not found." });

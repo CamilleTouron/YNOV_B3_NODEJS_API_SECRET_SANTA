@@ -82,7 +82,7 @@ exports.deleteMemberById = async (req, res) => {
 
 exports.doAdminExist = async () => {
     try {
-        const admin = memberService.getAdmin();
+        const admin = await memberService.getMainAdmin();
         if (admin.dataValues.mail != null) {
             return true;
         } else {
@@ -94,13 +94,13 @@ exports.doAdminExist = async () => {
 };
 
 exports.createAdmin = async () => {
-    let admin = await memberService.getAdmin();
+    let admin = await memberService.getMainAdmin();
     try {
         if (admin && admin.dataValues != null && admin.dataValues.mail != null) {
             return;
         } else {
             memberService.addMember(process.env.ADMIN_LASTNAME, process.env.ADMIN_FIRSTNAME, process.env.ADMIN_MAIL, true, passwordService.crypt(process.env.ADMIN_PWD));
-            admin = await memberService.getAdmin();
+            admin = await memberService.getMainAdmin();
             if (!admin.dataValues && !admin.dataValues.mail) {
                 throw new Error("Failed to create Admin so server cannot start.");
             }
@@ -115,22 +115,28 @@ exports.updateMember = async (req, res) => {
         let member = await memberService.getMemberById(parseInt(req.params.id));
         if (member) {
             if (req.body) {
+                let changes = [];
                 if (req.body.firstname && /^[a-zA-Z]+$/.test(req.body.firstname) && req.body.firstname != process.env.ADMIN_FIRSTNAME) {
-                    memberService.updateFirstname(req.params.id, req.body.firstname);
+                    await memberService.updateFirstname(req.params.id, req.body.firstname);
+                    changes.push("firstname");
                 }
                 if (req.body.lastname && /^[a-zA-Z]+$/.test(req.body.lastName) && req.body.firstname != process.env.ADMIN_LASTNAME) {
-                    memberService.updateLastname(req.params.id, req.body.lastname);
+                    await memberService.updateLastname(req.params.id, req.body.lastname);
+                    changes.push("lastname");
                 }
                 if (req.body.mail && req.body.mail.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-                    memberService.updateMail(req.params.id, req.body.mail);
+                    await memberService.updateMail(req.params.id, req.body.mail);
+                    changes.push("mail");
                 }
                 if (req.body.isAdmin && (req.body.isAdmin === true || req.body.isAdmin === false)) {
-                    memberService.updateAdminStatus(req.params.id, req.body.isAdmin);
+                    await memberService.updateAdminStatus(req.params.id, req.body.isAdmin);
+                    changes.push("isAdmin");
                 }
                 if (req.body.password && !/\s/.test(req.body.password)) {
-                    memberService.updatePassword(req.params.id, passwordService.crypt(req.body.password));
+                    await memberService.updatePassword(req.params.id, passwordService.crypt(req.body.password));
+                    changes.push("password");
                 }
-                res.status(200).json({ message: "Update well done." });
+                res.status(200).json({ message: "Update well done." , changes});
             } else {
                 res.status(400).json({ message: "Wrong parameters." });
             }

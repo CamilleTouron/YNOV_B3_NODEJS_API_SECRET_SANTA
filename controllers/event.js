@@ -68,9 +68,9 @@ exports.createEvent = async (req, res) => {
 
 exports.deleteEventById = async (req, res) => {
     if (req.params.id) {
-        const event = eventService.getEventById(req.params.id);
+        const event = await eventService.getEventById(req.params.id);
         if (event) {
-            eventService.deleteEventById(req.params.id);
+            await eventService.deleteEventById(req.params.id);
             res.status(200).json({ message: "Event well deleted." });
         } else {
             res.status(404).json({ message: "Event not found." });
