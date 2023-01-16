@@ -5,7 +5,7 @@ require('dotenv').config();
 
 database.instance.sync({ force: false }).then(() => {
     memberController.createAdmin();
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT, process.env.HOST,() => {
         console.log('Server connected to database and running on port ' + process.env.PORT + ' !');
     });
 }).catch((error) => {

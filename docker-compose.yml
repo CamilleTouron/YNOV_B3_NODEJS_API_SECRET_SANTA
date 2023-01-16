@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: SECRET_SANTA_API
     environment:
+     - HOST=0.0.0.0
      - PORT=3003
      - ADMIN_FIRSTNAME=admin
      - ADMIN_LASTNAME=admin
@@ -15,4 +16,4 @@ services:
      - FORCE=false
      - TOKEN_TIMEOUT=2h
     ports:
-      - "3003:3003"
+      - ${PORT}:3003
