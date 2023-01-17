@@ -9,8 +9,8 @@ exports.getMainAdmin = () => {
     return dataBase.member.findOne({
         limit: 1,
         where: {
-            firstname: process.env.ADMIN_FIRSTNAME,
-            lastname: process.env.ADMIN_LASTNAME,
+            firstname: (process.env.ADMIN_FIRSTNAME || "admin"),
+            lastname: (process.env.ADMIN_LASTNAME || "admin"),
         },
     });
 };

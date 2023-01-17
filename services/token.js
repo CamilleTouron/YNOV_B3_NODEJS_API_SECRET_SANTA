@@ -11,7 +11,7 @@ function getPayload(isAdmin, memberId) {
 
 exports.getToken = (isAdmin, memberId) => {
     try {
-        const token = jwt.sign({ data: getPayload(isAdmin, memberId) }, process.env.SECRET, { expiresIn: process.env.TOKEN_TIMEOUT });
+        const token = jwt.sign({ data: getPayload(isAdmin, memberId) }, (process.env.SECRET || "10"), { expiresIn: (process.env.TOKEN_TIMEOUT || "2h") });
         console.log(token)
         return token;
     } catch (error) {
@@ -21,7 +21,7 @@ exports.getToken = (isAdmin, memberId) => {
 
 exports.checkToken = (token) => {
     try {
-        const result = jwt.verify(token, process.env.SECRET);
+        const result = jwt.verify(token, (process.env.SECRET||"10"));
         return result;
     } catch (error) {
         return false;
